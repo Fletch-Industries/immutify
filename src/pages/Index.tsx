@@ -1,7 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ThoughtEditor from '@/components/ThoughtEditor';
 import ThoughtList from '@/components/ThoughtList';
+import HashVerification from '@/components/HashVerification';
+import TokenBrowser from '@/components/TokenBrowser';
 import { generateHash, submitToBlockchain, ThoughtData } from '@/utils/cryptoUtils';
 import { toast } from '@/hooks/use-toast';
 
@@ -110,13 +113,31 @@ const Index = () => {
           </p>
         </div>
 
-        {/* Editor */}
-        <div className="mb-12">
-          <ThoughtEditor onSubmit={handleSubmitThought} />
-        </div>
-
-        {/* Thoughts List */}
-        <ThoughtList thoughts={thoughts} />
+        {/* Main Content with Tabs */}
+        <Tabs defaultValue="create" className="w-full">
+          <TabsList className="grid w-full grid-cols-4 mb-8">
+            <TabsTrigger value="create">Create Proof</TabsTrigger>
+            <TabsTrigger value="thoughts">My Thoughts</TabsTrigger>
+            <TabsTrigger value="verify">Verify Hash</TabsTrigger>
+            <TabsTrigger value="browse">Browse Tokens</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="create" className="space-y-6">
+            <ThoughtEditor onSubmit={handleSubmitThought} />
+          </TabsContent>
+          
+          <TabsContent value="thoughts" className="space-y-6">
+            <ThoughtList thoughts={thoughts} />
+          </TabsContent>
+          
+          <TabsContent value="verify" className="space-y-6">
+            <HashVerification />
+          </TabsContent>
+          
+          <TabsContent value="browse" className="space-y-6">
+            <TokenBrowser />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

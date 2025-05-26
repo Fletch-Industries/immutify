@@ -8,6 +8,16 @@ export interface ThoughtData {
   isPrivate: boolean;
 }
 
+export interface HelloWorldToken {
+  message: string;
+  token: {
+    txid: string;
+    outputIndex: number;
+    lockingScript: string;
+    satoshis: number;
+  };
+}
+
 export const generateHash = async (data: ThoughtData): Promise<string> => {
   const message = `${data.title}|||${data.content}|||${data.isPrivate}|||${Date.now()}`;
   
@@ -18,6 +28,17 @@ export const generateHash = async (data: ThoughtData): Promise<string> => {
   
   console.log('Generated hash for message:', message);
   console.log('Hash:', hmacMessageHex);
+  
+  return hmacMessageHex;
+};
+
+export const generateHashForVerification = async (title: string, content: string, isPrivate: boolean, timestamp: number, key: string = 'key'): Promise<string> => {
+  const message = `${title}|||${content}|||${isPrivate}|||${timestamp}`;
+  
+  // Use BSV SDK HMAC implementation
+  let hmacHasher = new Hash.SHA256HMAC(key);
+  hmacHasher.update(message);
+  let hmacMessageHex = hmacHasher.digestHex();
   
   return hmacMessageHex;
 };
@@ -38,6 +59,16 @@ export const submitToBlockchain = async (hash: string): Promise<string> => {
   } else {
     throw new Error('Unexpected response from blockchain');
   }
+};
+
+export const queryAllTokens = async (): Promise<HelloWorldToken[]> => {
+  console.log('Querying all tokens from blockchain');
+  
+  // Look up all tokens
+  const tokens = await queryTokens();
+  
+  console.log('Query results:', tokens);
+  return tokens as HelloWorldToken[];
 };
 
 export const queryBlockchain = async (hash: string): Promise<any[]> => {
