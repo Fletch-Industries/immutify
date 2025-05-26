@@ -21,10 +21,10 @@ export interface HelloWorldToken {
 export const generateHash = async (data: ThoughtData): Promise<string> => {  
   // Use BSV SDK HMAC implementation
   let hmacHasher = new Hash.SHA256HMAC(data.title);
-  hmacHasher.update(content);
+  hmacHasher.update(data.content);
   let hmacMessageHex = hmacHasher.digestHex();
   
-  console.log('Generated hash for message:', content);
+  console.log('Generated hash for message:', data.content);
   console.log('Hash:', hmacMessageHex);
   
   return hmacMessageHex;
