@@ -13,6 +13,7 @@ interface ThoughtListProps {
     timestamp: Date;
     isPrivate: boolean;
     onChain: boolean;
+    txid?: string;
   }>;
 }
 

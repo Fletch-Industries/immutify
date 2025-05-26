@@ -15,6 +15,7 @@ interface ThoughtCardProps {
     timestamp: Date;
     isPrivate: boolean;
     onChain: boolean;
+    txid?: string;
   };
 }
 
@@ -94,12 +95,17 @@ const ThoughtCard = ({ thought }: ThoughtCardProps) => {
               {hashCopied ? "Copied!" : "Copy"}
             </Button>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mb-2">
             <Hash className="h-4 w-4 text-purple-600 flex-shrink-0" />
             <code className="text-xs font-mono text-gray-600 break-all bg-white px-2 py-1 rounded">
               {thought.hash}
             </code>
           </div>
+          {thought.txid && (
+            <div className="text-xs text-gray-500 mt-2">
+              <strong>Transaction ID:</strong> {thought.txid}
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

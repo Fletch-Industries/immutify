@@ -1,6 +1,6 @@
 
-// Placeholder for the blockchain integration
-// This will be replaced with the actual BSV SDK implementation
+import { createToken, queryTokens } from 'hello-tokens';
+import { Hash } from '@bsv/sdk';
 
 export interface ThoughtData {
   title: string;
@@ -9,57 +9,38 @@ export interface ThoughtData {
 }
 
 export const generateHash = async (data: ThoughtData): Promise<string> => {
-  // For now, we'll use a simple hash simulation
-  // This will be replaced with the BSV SDK HMAC implementation
   const message = `${data.title}|||${data.content}|||${data.isPrivate}|||${Date.now()}`;
   
-  // Simulate the BSV SDK hashing process
-  // let hmacHasher = new Hash.SHA256HMAC('key')
-  // hmacHasher.update(message)
-  // let hmacMessageHex = hmacHasher.digestHex()
-  
-  // For demo purposes, create a mock hash
-  const encoder = new TextEncoder();
-  const dataBuffer = encoder.encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  // Use BSV SDK HMAC implementation
+  let hmacHasher = new Hash.SHA256HMAC('key');
+  hmacHasher.update(message);
+  let hmacMessageHex = hmacHasher.digestHex();
   
   console.log('Generated hash for message:', message);
-  console.log('Hash:', hashHex);
+  console.log('Hash:', hmacMessageHex);
   
-  return hashHex;
+  return hmacMessageHex;
 };
 
-export const submitToBlockchain = async (hash: string): Promise<boolean> => {
-  // Placeholder for blockchain submission
-  // This will be replaced with: await createToken(hmacMessageHex)
-  
+export const submitToBlockchain = async (hash: string): Promise<string> => {
   console.log('Submitting hash to blockchain:', hash);
   
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  // Create a token that embeds the given UTF-8 message
+  const result = await createToken(hash);
   
-  console.log('Hash submitted successfully');
-  return true;
+  console.log('Hash submitted successfully, txid:', result);
+  return result; // This should be the transaction ID
 };
 
 export const queryBlockchain = async (hash: string): Promise<any[]> => {
-  // Placeholder for blockchain query
-  // This will be replaced with: await queryTokens({ limit: 10, message: hash })
-  
   console.log('Querying blockchain for hash:', hash);
   
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  // Look it up via the ls_helloworld overlay
+  const tokens = await queryTokens({
+    limit: 10,
+    message: hash
+  });
   
-  // Mock response
-  return [
-    {
-      hash,
-      timestamp: new Date(),
-      blockHeight: 12345,
-      verified: true
-    }
-  ];
+  console.log('Query results:', tokens);
+  return tokens;
 };

@@ -13,6 +13,7 @@ interface Thought {
   timestamp: Date;
   isPrivate: boolean;
   onChain: boolean;
+  txid?: string; // Transaction ID from blockchain
 }
 
 const Index = () => {
@@ -62,20 +63,20 @@ const Index = () => {
 
       // Submit to blockchain in background
       try {
-        await submitToBlockchain(hash);
+        const txid = await submitToBlockchain(hash);
         
-        // Update the thought to mark it as on-chain
+        // Update the thought to mark it as on-chain with transaction ID
         setThoughts(prev => 
           prev.map(thought => 
             thought.id === newThought.id 
-              ? { ...thought, onChain: true }
+              ? { ...thought, onChain: true, txid }
               : thought
           )
         );
 
         toast({
           title: "Blockchain Proof Created",
-          description: "Your thought proof has been successfully recorded on the blockchain.",
+          description: `Your thought proof has been recorded on-chain. TX: ${txid}`,
         });
       } catch (blockchainError) {
         console.error('Blockchain submission failed:', blockchainError);
