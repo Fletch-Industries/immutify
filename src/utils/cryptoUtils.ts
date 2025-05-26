@@ -1,4 +1,3 @@
-
 import { createToken, queryTokens } from 'hello-tokens';
 import { Hash } from '@bsv/sdk';
 
@@ -64,8 +63,10 @@ export const submitToBlockchain = async (hash: string): Promise<string> => {
 export const queryAllTokens = async (): Promise<HelloWorldToken[]> => {
   console.log('Querying all tokens from blockchain');
   
-  // Look up all tokens
-  const tokens = await queryTokens();
+  // Look up all tokens with default parameters
+  const tokens = await queryTokens({
+    limit: 100
+  });
   
   console.log('Query results:', tokens);
   return tokens as HelloWorldToken[];
