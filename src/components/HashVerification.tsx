@@ -12,7 +12,6 @@ import { toast } from '@/hooks/use-toast';
 const HashVerification = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [key, setKey] = useState('key');
   const [expectedHash, setExpectedHash] = useState('');
   const [verificationResult, setVerificationResult] = useState<{ verified: boolean; generatedHash: string } | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -30,7 +29,7 @@ const HashVerification = () => {
     setIsVerifying(true);
     
     try {
-      const generatedHash = await generateHashForVerification(title, content, key);
+      const generatedHash = await generateHashForVerification(title, content);
       const verified = generatedHash === expectedHash.trim();
       
       setVerificationResult({ verified, generatedHash });
@@ -57,7 +56,6 @@ const HashVerification = () => {
   const clearForm = () => {
     setTitle('');
     setContent('');
-    setKey('key');
     setExpectedHash('');
     setVerificationResult(null);
   };
@@ -72,7 +70,7 @@ const HashVerification = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         <Input
-          placeholder="Title"
+          placeholder="Title (used as hash key)"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
@@ -82,12 +80,6 @@ const HashVerification = () => {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           className="min-h-[150px]"
-        />
-        
-        <Input
-          placeholder="Key (default: 'key')"
-          value={key}
-          onChange={(e) => setKey(e.target.value)}
         />
         
         <Input
