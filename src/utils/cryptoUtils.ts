@@ -28,8 +28,16 @@ export const submitToBlockchain = async (hash: string): Promise<string> => {
   // Create a token that embeds the given UTF-8 message
   const result = await createToken(hash);
   
-  console.log('Hash submitted successfully, txid:', result);
-  return result; // This should be the transaction ID
+  console.log('Blockchain response:', result);
+  
+  // Extract transaction ID from the response
+  if (result && typeof result === 'object' && 'txid' in result) {
+    return result.txid as string;
+  } else if (result && typeof result === 'object' && 'error' in result) {
+    throw new Error(`Blockchain submission failed: ${result.error}`);
+  } else {
+    throw new Error('Unexpected response from blockchain');
+  }
 };
 
 export const queryBlockchain = async (hash: string): Promise<any[]> => {
