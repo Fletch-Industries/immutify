@@ -1,3 +1,4 @@
+
 import { createToken, queryTokens } from 'hello-tokens';
 import { Hash } from '@bsv/sdk';
 
@@ -18,7 +19,7 @@ export interface HelloWorldToken {
 }
 
 export const generateHash = async (data: ThoughtData): Promise<string> => {
-  const message = `${data.title}|||${data.content}|||${data.isPrivate}|||${Date.now()}`;
+  const message = `${data.title}|||${data.content}`;
   
   // Use BSV SDK HMAC implementation
   let hmacHasher = new Hash.SHA256HMAC('key');
@@ -31,8 +32,8 @@ export const generateHash = async (data: ThoughtData): Promise<string> => {
   return hmacMessageHex;
 };
 
-export const generateHashForVerification = async (title: string, content: string, isPrivate: boolean, timestamp: number, key: string = 'key'): Promise<string> => {
-  const message = `${title}|||${content}|||${isPrivate}|||${timestamp}`;
+export const generateHashForVerification = async (title: string, content: string, key: string = 'key'): Promise<string> => {
+  const message = `${title}|||${content}`;
   
   // Use BSV SDK HMAC implementation
   let hmacHasher = new Hash.SHA256HMAC(key);

@@ -12,15 +12,13 @@ import { toast } from '@/hooks/use-toast';
 const HashVerification = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [isPrivate, setIsPrivate] = useState(true);
-  const [timestamp, setTimestamp] = useState('');
   const [key, setKey] = useState('key');
   const [expectedHash, setExpectedHash] = useState('');
   const [verificationResult, setVerificationResult] = useState<{ verified: boolean; generatedHash: string } | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
 
   const handleVerify = async () => {
-    if (!title.trim() || !content.trim() || !timestamp.trim() || !expectedHash.trim()) {
+    if (!title.trim() || !content.trim() || !expectedHash.trim()) {
       toast({
         title: "Missing Information",
         description: "Please fill in all fields to verify the hash.",
@@ -32,12 +30,7 @@ const HashVerification = () => {
     setIsVerifying(true);
     
     try {
-      const timestampNumber = parseInt(timestamp);
-      if (isNaN(timestampNumber)) {
-        throw new Error('Invalid timestamp format');
-      }
-
-      const generatedHash = await generateHashForVerification(title, content, isPrivate, timestampNumber, key);
+      const generatedHash = await generateHashForVerification(title, content, key);
       const verified = generatedHash === expectedHash.trim();
       
       setVerificationResult({ verified, generatedHash });
@@ -64,8 +57,6 @@ const HashVerification = () => {
   const clearForm = () => {
     setTitle('');
     setContent('');
-    setIsPrivate(true);
-    setTimestamp('');
     setKey('key');
     setExpectedHash('');
     setVerificationResult(null);
@@ -80,18 +71,11 @@ const HashVerification = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <Input
-            placeholder="Timestamp (e.g., 1234567890123)"
-            value={timestamp}
-            onChange={(e) => setTimestamp(e.target.value)}
-          />
-        </div>
+        <Input
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
         
         <Textarea
           placeholder="Content"
@@ -100,23 +84,11 @@ const HashVerification = () => {
           className="min-h-[150px]"
         />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input
-            placeholder="Key (default: 'key')"
-            value={key}
-            onChange={(e) => setKey(e.target.value)}
-          />
-          <div className="flex items-center gap-2">
-            <label className="text-sm font-medium">Private:</label>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsPrivate(!isPrivate)}
-            >
-              {isPrivate ? 'True' : 'False'}
-            </Button>
-          </div>
-        </div>
+        <Input
+          placeholder="Key (default: 'key')"
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+        />
         
         <Input
           placeholder="Expected Hash"
