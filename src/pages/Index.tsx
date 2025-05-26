@@ -55,8 +55,19 @@ const Index = () => {
 
   const handleSubmitThought = async (thoughtData: ThoughtData) => {
     try {
-      // Generate cryptographic hash
-      const hash = await generateHash(thoughtData);
+      let dataToSubmit: string;
+      let hash: string;
+
+      if (thoughtData.isPrivate) {
+        // Generate cryptographic hash for private thoughts
+        hash = await generateHash(thoughtData);
+        dataToSubmit = hash;
+      } else {
+        // For public thoughts, submit the full content directly
+        const publicContent = `${thoughtData.title}: ${thoughtData.content}`;
+        dataToSubmit = publicContent;
+        hash = dataToSubmit; // Store the full content as the "hash" for display
+      }
       
       const newThought: Thought = {
         id: crypto.randomUUID(),
@@ -73,12 +84,14 @@ const Index = () => {
 
       toast({
         title: "Thought Created",
-        description: "Your thought has been hashed and is being submitted to the blockchain.",
+        description: thoughtData.isPrivate 
+          ? "Your thought has been hashed and is being submitted to the blockchain."
+          : "Your content is being published directly to the blockchain.",
       });
 
       // Submit to blockchain in background
       try {
-        const txid = await submitToBlockchain(hash);
+        const txid = await submitToBlockchain(dataToSubmit);
         
         // Update the thought to mark it as on-chain with transaction ID
         setThoughts(prev => 
@@ -90,8 +103,10 @@ const Index = () => {
         );
 
         toast({
-          title: "Blockchain Proof Created",
-          description: `Your thought proof has been recorded on-chain. TX: ${txid}`,
+          title: thoughtData.isPrivate ? "Blockchain Proof Created" : "Content Published",
+          description: thoughtData.isPrivate 
+            ? `Your thought proof has been recorded on-chain. TX: ${txid}`
+            : `Your content has been published on-chain. TX: ${txid}`,
         });
       } catch (blockchainError) {
         console.error('Blockchain submission failed:', blockchainError);
@@ -102,7 +117,9 @@ const Index = () => {
         } else {
           toast({
             title: "Blockchain Error",
-            description: "Failed to submit to blockchain, but your hash has been saved locally.",
+            description: thoughtData.isPrivate 
+              ? "Failed to submit to blockchain, but your hash has been saved locally."
+              : "Failed to publish to blockchain, but your content has been saved locally.",
             variant: "destructive"
           });
         }
@@ -111,7 +128,9 @@ const Index = () => {
       console.error('Error creating thought:', error);
       toast({
         title: "Error",
-        description: "Failed to create thought proof. Please try again.",
+        description: thoughtData.isPrivate 
+          ? "Failed to create thought proof. Please try again."
+          : "Failed to publish content. Please try again.",
         variant: "destructive"
       });
     }

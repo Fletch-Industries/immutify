@@ -1,3 +1,4 @@
+
 import { createToken, queryTokens } from 'hello-tokens';
 import { Hash } from '@bsv/sdk';
 
@@ -38,11 +39,11 @@ export const generateHashForVerification = async (title: string, content: string
   return hmacMessageHex;
 };
 
-export const submitToBlockchain = async (hash: string): Promise<string> => {
-  console.log('Submitting hash to blockchain:', hash);
+export const submitToBlockchain = async (data: string): Promise<string> => {
+  console.log('Submitting data to blockchain:', data);
   
   // Create a token that embeds the given UTF-8 message
-  const result = await createToken(hash);
+  const result = await createToken(data);
   
   console.log('Blockchain response:', result);
   

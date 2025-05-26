@@ -46,7 +46,10 @@ const ThoughtEditor = ({ onSubmit }: ThoughtEditorProps) => {
         />
         
         <Textarea
-          placeholder="Write your idea, process, or thought here. This will be cryptographically hashed and can serve as proof of existence..."
+          placeholder={isPrivate 
+            ? "Write your idea, process, or thought here. This will be cryptographically hashed and can serve as proof of existence..."
+            : "Write your idea, process, or thought here. This content will be published directly on the blockchain for everyone to see..."
+          }
           value={content}
           onChange={(e) => setContent(e.target.value)}
           className="min-h-[300px] resize-none"
@@ -77,22 +80,29 @@ const ThoughtEditor = ({ onSubmit }: ThoughtEditorProps) => {
             {isSubmitting ? (
               <>
                 <Shield className="h-4 w-4 mr-2 animate-spin" />
-                Creating Proof...
+                {isPrivate ? 'Creating Proof...' : 'Publishing...'}
               </>
             ) : (
               <>
                 <Shield className="h-4 w-4 mr-2" />
-                Create Proof
+                {isPrivate ? 'Create Proof' : 'Publish Content'}
               </>
             )}
           </Button>
         </div>
         
-        {isPrivate && (
+        {isPrivate ? (
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
             <p className="text-sm text-amber-800">
               <strong>Private Mode:</strong> Only the cryptographic hash will be stored on-chain. 
               Your content remains private but provably existed at this timestamp.
+            </p>
+          </div>
+        ) : (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <p className="text-sm text-blue-800">
+              <strong>Public Mode:</strong> Your full content will be published directly on the blockchain 
+              for everyone to see. This creates a permanent, public record.
             </p>
           </div>
         )}
