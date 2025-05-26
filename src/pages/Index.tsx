@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ThoughtEditor from '@/components/ThoughtEditor';
@@ -161,7 +162,7 @@ const Index = () => {
           <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-blue-500/20 rounded-2xl blur-lg"></div>
           <div className="relative bg-slate-800/30 border border-slate-700/50 rounded-2xl backdrop-blur-xl p-8">
             <Tabs defaultValue="create" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-8 bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
+              <TabsList className="grid w-full grid-cols-3 mb-8 bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
                 <TabsTrigger 
                   value="create" 
                   className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300 data-[state=active]:border data-[state=active]:border-cyan-500/30 text-slate-300 hover:text-slate-200 transition-all duration-200"
@@ -209,3 +210,4 @@ const Index = () => {
 };
 
 export default Index;
+
