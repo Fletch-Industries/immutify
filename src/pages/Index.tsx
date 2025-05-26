@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ThoughtEditor from '@/components/ThoughtEditor';
@@ -181,19 +182,19 @@ const Index = () => {
               <TabsList className="grid w-full grid-cols-3 mb-8 bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
                 <TabsTrigger 
                   value="create" 
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-slate-100 data-[state=active]:border data-[state=active]:border-cyan-400/50 data-[state=active]:shadow-lg text-slate-300 hover:text-slate-200 transition-all duration-200"
+                  className="data-[state=active]:bg-slate-700 data-[state=active]:text-slate-100 text-slate-300 hover:text-slate-200 transition-all duration-200"
                 >
                   Create Proof
                 </TabsTrigger>
                 <TabsTrigger 
                   value="verify" 
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500/20 data-[state=active]:to-pink-500/20 data-[state=active]:text-slate-100 data-[state=active]:border data-[state=active]:border-purple-400/50 data-[state=active]:shadow-lg text-slate-300 hover:text-slate-200 transition-all duration-200"
+                  className="data-[state=active]:bg-slate-700 data-[state=active]:text-slate-100 text-slate-300 hover:text-slate-200 transition-all duration-200"
                 >
                   Verify Hash
                 </TabsTrigger>
                 <TabsTrigger 
                   value="browse" 
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500/20 data-[state=active]:to-cyan-500/20 data-[state=active]:text-slate-100 data-[state=active]:border data-[state=active]:border-blue-400/50 data-[state=active]:shadow-lg text-slate-300 hover:text-slate-200 transition-all duration-200"
+                  className="data-[state=active]:bg-slate-700 data-[state=active]:text-slate-100 text-slate-300 hover:text-slate-200 transition-all duration-200"
                 >
                   Browse Tokens
                 </TabsTrigger>
