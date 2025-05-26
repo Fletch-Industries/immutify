@@ -18,26 +18,22 @@ export interface HelloWorldToken {
   };
 }
 
-export const generateHash = async (data: ThoughtData): Promise<string> => {
-  const message = `${data.title}|||${data.content}`;
-  
+export const generateHash = async (data: ThoughtData): Promise<string> => {  
   // Use BSV SDK HMAC implementation
-  let hmacHasher = new Hash.SHA256HMAC('key');
-  hmacHasher.update(message);
+  let hmacHasher = new Hash.SHA256HMAC(data.title);
+  hmacHasher.update(content);
   let hmacMessageHex = hmacHasher.digestHex();
   
-  console.log('Generated hash for message:', message);
+  console.log('Generated hash for message:', content);
   console.log('Hash:', hmacMessageHex);
   
   return hmacMessageHex;
 };
 
-export const generateHashForVerification = async (title: string, content: string, key: string = 'key'): Promise<string> => {
-  const message = `${title}|||${content}`;
-  
+export const generateHashForVerification = async (title: string, content: string, key: string = 'key'): Promise<string> => {  
   // Use BSV SDK HMAC implementation
   let hmacHasher = new Hash.SHA256HMAC(key);
-  hmacHasher.update(message);
+  hmacHasher.update(content);
   let hmacMessageHex = hmacHasher.digestHex();
   
   return hmacMessageHex;
