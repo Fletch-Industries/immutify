@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ThoughtEditor from '@/components/ThoughtEditor';
@@ -6,6 +5,7 @@ import HashVerification from '@/components/HashVerification';
 import TokenBrowser from '@/components/TokenBrowser';
 import { generateHash, submitToBlockchain, ThoughtData } from '@/utils/cryptoUtils';
 import { toast } from '@/hooks/use-toast';
+import { Shield, Lock, Database } from 'lucide-react';
 
 interface Thought {
   id: string;
@@ -99,39 +99,109 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+      
+      {/* Glowing orbs */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-cyan-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
+
+      <div className="container mx-auto px-4 py-8 relative z-10">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-4">
-            Immutify
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Publish your ideas with cryptographic proof of existence. 
-            Create a verifiable timestamp without revealing your content to the world.
+        <div className="text-center mb-16">
+          <div className="inline-block relative">
+            <h1 className="text-6xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mb-6 tracking-tight">
+              Immutify
+            </h1>
+            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400/20 via-purple-400/20 to-blue-400/20 blur-lg rounded-lg"></div>
+          </div>
+          
+          <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed mb-8">
+            Publish your ideas with{" "}
+            <span className="text-cyan-400 font-semibold">cryptographic proof</span>{" "}
+            of existence. Create a verifiable timestamp without revealing your content to the world.
           </p>
+          
+          {/* Feature highlights */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12">
+            <div className="group relative">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative bg-slate-800/50 border border-slate-700/50 rounded-lg p-6 backdrop-blur-sm">
+                <Shield className="h-8 w-8 text-cyan-400 mx-auto mb-3" />
+                <h3 className="text-slate-200 font-semibold mb-2">Immutable Proof</h3>
+                <p className="text-slate-400 text-sm">Your ideas are cryptographically secured on the blockchain</p>
+              </div>
+            </div>
+            
+            <div className="group relative">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative bg-slate-800/50 border border-slate-700/50 rounded-lg p-6 backdrop-blur-sm">
+                <Lock className="h-8 w-8 text-purple-400 mx-auto mb-3" />
+                <h3 className="text-slate-200 font-semibold mb-2">Private by Design</h3>
+                <p className="text-slate-400 text-sm">Only you know the content, the world sees the proof</p>
+              </div>
+            </div>
+            
+            <div className="group relative">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative bg-slate-800/50 border border-slate-700/50 rounded-lg p-6 backdrop-blur-sm">
+                <Database className="h-8 w-8 text-blue-400 mx-auto mb-3" />
+                <h3 className="text-slate-200 font-semibold mb-2">Decentralized</h3>
+                <p className="text-slate-400 text-sm">No central authority, no single point of failure</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Main Content with Tabs */}
-        <Tabs defaultValue="create" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
-            <TabsTrigger value="create">Create Proof</TabsTrigger>
-            <TabsTrigger value="verify">Verify Hash</TabsTrigger>
-            <TabsTrigger value="browse">Browse Tokens</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="create" className="space-y-6">
-            <ThoughtEditor onSubmit={handleSubmitThought} />
-          </TabsContent>
-          
-          <TabsContent value="verify" className="space-y-6">
-            <HashVerification />
-          </TabsContent>
-          
-          <TabsContent value="browse" className="space-y-6">
-            <TokenBrowser />
-          </TabsContent>
-        </Tabs>
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-blue-500/20 rounded-2xl blur-lg"></div>
+          <div className="relative bg-slate-800/30 border border-slate-700/50 rounded-2xl backdrop-blur-xl p-8">
+            <Tabs defaultValue="create" className="w-full">
+              <TabsList className="grid w-full grid-cols-3 mb-8 bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
+                <TabsTrigger 
+                  value="create" 
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-cyan-300 data-[state=active]:border data-[state=active]:border-cyan-500/30 text-slate-300 hover:text-slate-200 transition-all duration-200"
+                >
+                  Create Proof
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="verify" 
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500/20 data-[state=active]:to-pink-500/20 data-[state=active]:text-purple-300 data-[state=active]:border data-[state=active]:border-purple-500/30 text-slate-300 hover:text-slate-200 transition-all duration-200"
+                >
+                  Verify Hash
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="browse" 
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500/20 data-[state=active]:to-cyan-500/20 data-[state=active]:text-blue-300 data-[state=active]:border data-[state=active]:border-blue-500/30 text-slate-300 hover:text-slate-200 transition-all duration-200"
+                >
+                  Browse Tokens
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="create" className="space-y-6">
+                <ThoughtEditor onSubmit={handleSubmitThought} />
+              </TabsContent>
+              
+              <TabsContent value="verify" className="space-y-6">
+                <HashVerification />
+              </TabsContent>
+              
+              <TabsContent value="browse" className="space-y-6">
+                <TokenBrowser />
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center mt-16 pb-8">
+          <p className="text-slate-500 text-sm">
+            Powered by blockchain technology • Built for creators and innovators
+          </p>
+        </div>
       </div>
     </div>
   );
