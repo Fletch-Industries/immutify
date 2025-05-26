@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import { toast } from '@/hooks/use-toast';
 import {
   AlertDialog,
   AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -256,6 +258,9 @@ const TokenBrowser = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowWalletDialog(false)}>
+              Dismiss
+            </AlertDialogCancel>
             <AlertDialogAction asChild>
               <a 
                 href="https://metanet.bsvb.tech/" 

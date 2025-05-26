@@ -6,6 +6,17 @@ import TokenBrowser from '@/components/TokenBrowser';
 import { generateHash, submitToBlockchain, ThoughtData } from '@/utils/cryptoUtils';
 import { toast } from '@/hooks/use-toast';
 import { Shield, Lock, Database } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { ExternalLink } from 'lucide-react';
 
 interface Thought {
   id: string;
@@ -20,6 +31,7 @@ interface Thought {
 
 const Index = () => {
   const [thoughts, setThoughts] = useState<Thought[]>([]);
+  const [showWalletDialog, setShowWalletDialog] = useState(false);
 
   // Load thoughts from localStorage on component mount
   useEffect(() => {
@@ -82,11 +94,17 @@ const Index = () => {
         });
       } catch (blockchainError) {
         console.error('Blockchain submission failed:', blockchainError);
-        toast({
-          title: "Blockchain Error",
-          description: "Failed to submit to blockchain, but your hash has been saved locally.",
-          variant: "destructive"
-        });
+        
+        // Check for wallet error
+        if (blockchainError instanceof Error && blockchainError.message.includes("No wallet available over any communication substrate")) {
+          setShowWalletDialog(true);
+        } else {
+          toast({
+            title: "Blockchain Error",
+            description: "Failed to submit to blockchain, but your hash has been saved locally.",
+            variant: "destructive"
+          });
+        }
       }
     } catch (error) {
       console.error('Error creating thought:', error);
@@ -163,19 +181,19 @@ const Index = () => {
               <TabsList className="grid w-full grid-cols-3 mb-8 bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
                 <TabsTrigger 
                   value="create" 
-                  className="data-[state=active]:bg-cyan-500/30 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-cyan-400/50 data-[state=active]:shadow-lg text-slate-300 hover:text-slate-200 transition-all duration-200"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/20 data-[state=active]:to-blue-500/20 data-[state=active]:text-slate-100 data-[state=active]:border data-[state=active]:border-cyan-400/50 data-[state=active]:shadow-lg text-slate-300 hover:text-slate-200 transition-all duration-200"
                 >
                   Create Proof
                 </TabsTrigger>
                 <TabsTrigger 
                   value="verify" 
-                  className="data-[state=active]:bg-purple-500/30 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-purple-400/50 data-[state=active]:shadow-lg text-slate-300 hover:text-slate-200 transition-all duration-200"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500/20 data-[state=active]:to-pink-500/20 data-[state=active]:text-slate-100 data-[state=active]:border data-[state=active]:border-purple-400/50 data-[state=active]:shadow-lg text-slate-300 hover:text-slate-200 transition-all duration-200"
                 >
                   Verify Hash
                 </TabsTrigger>
                 <TabsTrigger 
                   value="browse" 
-                  className="data-[state=active]:bg-blue-500/30 data-[state=active]:text-white data-[state=active]:border data-[state=active]:border-blue-400/50 data-[state=active]:shadow-lg text-slate-300 hover:text-slate-200 transition-all duration-200"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500/20 data-[state=active]:to-cyan-500/20 data-[state=active]:text-slate-100 data-[state=active]:border data-[state=active]:border-blue-400/50 data-[state=active]:shadow-lg text-slate-300 hover:text-slate-200 transition-all duration-200"
                 >
                   Browse Tokens
                 </TabsTrigger>
@@ -203,6 +221,33 @@ const Index = () => {
           </p>
         </div>
       </div>
+
+      <AlertDialog open={showWalletDialog} onOpenChange={setShowWalletDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Wallet Required</AlertDialogTitle>
+            <AlertDialogDescription>
+              You need to install the Metanet Desktop Client before continuing.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowWalletDialog(false)}>
+              Dismiss
+            </AlertDialogCancel>
+            <AlertDialogAction asChild>
+              <a 
+                href="https://metanet.bsvb.tech/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2"
+              >
+                Install Metanet Desktop Client
+                <ExternalLink className="h-4 w-4" />
+              </a>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
