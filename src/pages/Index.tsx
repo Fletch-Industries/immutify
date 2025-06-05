@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ThoughtEditor from '@/components/ThoughtEditor';
 import HashVerification from '@/components/HashVerification';
 import TokenBrowser from '@/components/TokenBrowser';
-import { generateHash, submitToBlockchain, ThoughtData } from '@/utils/cryptoUtils';
+import { generateHash, generateFileHash, submitToBlockchain, ThoughtData } from '@/utils/cryptoUtils';
 import { toast } from '@/hooks/use-toast';
 import { Shield, Lock, Database } from 'lucide-react';
 import {

@@ -1,3 +1,4 @@
+
 import { createToken, queryTokens } from 'hello-tokens';
 import { Hash } from '@bsv/sdk';
 
@@ -39,9 +40,12 @@ export const generateFileHash = async (file: File, title: string): Promise<strin
         const arrayBuffer = e.target?.result as ArrayBuffer;
         const uint8Array = new Uint8Array(arrayBuffer);
         
+        // Convert Uint8Array to number array for BSV SDK compatibility
+        const numberArray = Array.from(uint8Array);
+        
         // Use BSV SDK HMAC implementation with title as key
         let hmacHasher = new Hash.SHA256HMAC(title);
-        hmacHasher.update(uint8Array);
+        hmacHasher.update(numberArray);
         let hmacMessageHex = hmacHasher.digestHex();
         
         console.log('Generated hash for file:', file.name);
