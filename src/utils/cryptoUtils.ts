@@ -1,4 +1,3 @@
-
 import { createToken, queryTokens } from 'hello-tokens';
 import { Hash } from '@bsv/sdk';
 
@@ -6,6 +5,7 @@ export interface ThoughtData {
   title: string;
   content: string;
   isPrivate: boolean;
+  mediaFile?: File;
 }
 
 export interface HelloWorldToken {
@@ -28,6 +28,38 @@ export const generateHash = async (data: ThoughtData): Promise<string> => {
   console.log('Hash:', hmacMessageHex);
   
   return hmacMessageHex;
+};
+
+export const generateFileHash = async (file: File, title: string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    
+    reader.onload = (e) => {
+      try {
+        const arrayBuffer = e.target?.result as ArrayBuffer;
+        const uint8Array = new Uint8Array(arrayBuffer);
+        
+        // Use BSV SDK HMAC implementation with title as key
+        let hmacHasher = new Hash.SHA256HMAC(title);
+        hmacHasher.update(uint8Array);
+        let hmacMessageHex = hmacHasher.digestHex();
+        
+        console.log('Generated hash for file:', file.name);
+        console.log('File hash:', hmacMessageHex);
+        
+        resolve(hmacMessageHex);
+      } catch (error) {
+        console.error('Error generating file hash:', error);
+        reject(error);
+      }
+    };
+    
+    reader.onerror = () => {
+      reject(new Error('Failed to read file'));
+    };
+    
+    reader.readAsArrayBuffer(file);
+  });
 };
 
 export const generateHashForVerification = async (title: string, content: string): Promise<string> => {  

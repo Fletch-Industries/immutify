@@ -58,12 +58,22 @@ const Index = () => {
       let dataToSubmit: string;
       let hash: string;
 
-      if (thoughtData.isPrivate) {
-        // Generate cryptographic hash for private thoughts
+      if (thoughtData.mediaFile) {
+        // If there's a media file, always hash it (even in public mode)
+        hash = await generateFileHash(thoughtData.mediaFile, thoughtData.title);
+        dataToSubmit = hash;
+        
+        // If there's also text content and it's public mode, append it
+        if (thoughtData.content && !thoughtData.isPrivate) {
+          const publicContent = `${thoughtData.title}: ${thoughtData.content}`;
+          dataToSubmit = `${hash} | ${publicContent}`;
+        }
+      } else if (thoughtData.isPrivate) {
+        // Generate cryptographic hash for private text-only thoughts
         hash = await generateHash(thoughtData);
         dataToSubmit = hash;
       } else {
-        // For public thoughts, submit the full content directly
+        // For public text-only thoughts, submit the full content directly
         const publicContent = `${thoughtData.title}: ${thoughtData.content}`;
         dataToSubmit = publicContent;
         hash = dataToSubmit; // Store the full content as the "hash" for display
@@ -82,11 +92,12 @@ const Index = () => {
       // Add to local state immediately
       setThoughts(prev => [newThought, ...prev]);
 
+      const hasMedia = thoughtData.mediaFile ? " with media" : "";
       toast({
         title: "Thought Created",
         description: thoughtData.isPrivate 
-          ? "Your thought has been hashed and is being submitted to the blockchain."
-          : "Your content is being published directly to the blockchain.",
+          ? `Your thought${hasMedia} has been hashed and is being submitted to the blockchain.`
+          : `Your content${hasMedia} is being published to the blockchain.`,
       });
 
       // Submit to blockchain in background
@@ -105,8 +116,8 @@ const Index = () => {
         toast({
           title: thoughtData.isPrivate ? "Blockchain Proof Created" : "Content Published",
           description: thoughtData.isPrivate 
-            ? `Your thought proof has been recorded on-chain. TX: ${txid}`
-            : `Your content has been published on-chain. TX: ${txid}`,
+            ? `Your thought proof${hasMedia} has been recorded on-chain. TX: ${txid}`
+            : `Your content${hasMedia} has been published on-chain. TX: ${txid}`,
         });
       } catch (blockchainError) {
         console.error('Blockchain submission failed:', blockchainError);
@@ -118,8 +129,8 @@ const Index = () => {
           toast({
             title: "Blockchain Error",
             description: thoughtData.isPrivate 
-              ? "Failed to submit to blockchain, but your hash has been saved locally."
-              : "Failed to publish to blockchain, but your content has been saved locally.",
+              ? `Failed to submit to blockchain, but your hash${hasMedia} has been saved locally.`
+              : `Failed to publish to blockchain, but your content${hasMedia} has been saved locally.`,
             variant: "destructive"
           });
         }
