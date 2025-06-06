@@ -1,9 +1,67 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
+    --background: 222 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 142 76% 36%;
+    --primary-foreground: 355 7% 97%;
+
+    --secondary: 215 28% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 215 28% 17%;
+    --muted-foreground: 217 11% 65%;
+
+    --accent: 142 76% 36%;
+    --accent-foreground: 355 7% 97%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 215 28% 17%;
+    --input: 215 28% 17%;
+    --ring: 142 76% 36%;
+
+    --radius: 0.75rem;
+
+    /* Custom crypto theme colors */
+    --crypto-green: 142 76% 36%;
+    --crypto-blue: 217 91% 60%;
+    --crypto-purple: 263 70% 50%;
+    --crypto-orange: 25 95% 53%;
+    --crypto-cyan: 189 94% 43%;
+    
+    /* Matrix/Grid colors */
+    --matrix-green: 120 100% 25%;
+    --matrix-dark: 120 100% 10%;
+    
+    /* Glow effects */
+    --glow-primary: 142 76% 36%;
+    --glow-secondary: 217 91% 60%;
+    --glow-accent: 263 70% 50%;
+
+    --sidebar-background: 224 71% 4%;
+    --sidebar-foreground: 213 31% 91%;
+    --sidebar-primary: 142 76% 36%;
+    --sidebar-primary-foreground: 355 7% 97%;
+    --sidebar-accent: 215 28% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 215 28% 17%;
+    --sidebar-ring: 142 76% 36%;
+  }
+
+  .light {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -13,7 +71,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 142 76% 36%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -22,7 +80,7 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
+    --accent: 142 76% 36%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
@@ -30,63 +88,16 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    --ring: 142 76% 36%;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
+    --sidebar-primary: 142 76% 36%;
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 142 76% 36%;
   }
 }
 
@@ -97,5 +108,204 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   }
+
+  /* Crypto-themed scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/50 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/70;
+  }
+}
+
+@layer components {
+  /* Crypto card with hex pattern */
+  .crypto-card {
+    @apply relative overflow-hidden bg-card/50 backdrop-blur-sm border border-primary/20 rounded-xl;
+    background-image: 
+      radial-gradient(circle at 25% 25%, hsl(var(--crypto-green) / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, hsl(var(--crypto-blue) / 0.1) 0%, transparent 50%);
+  }
+
+  .crypto-card::before {
+    content: '';
+    @apply absolute inset-0 opacity-20;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300ff88' fill-opacity='0.1'%3E%3Cpath d='M30 30l15-15v30l-15-15zM30 30l-15-15v30l15-15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Glowing input fields */
+  .crypto-input {
+    @apply relative;
+  }
+
+  .crypto-input input, .crypto-input textarea {
+    @apply bg-muted/50 border-primary/30 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300;
+  }
+
+  .crypto-input::before {
+    content: '';
+    @apply absolute inset-0 rounded-md opacity-0 transition-opacity duration-300;
+    background: linear-gradient(45deg, hsl(var(--crypto-green) / 0.1), hsl(var(--crypto-blue) / 0.1));
+    z-index: -1;
+  }
+
+  .crypto-input:focus-within::before {
+    @apply opacity-100;
+  }
+
+  /* Neon button effect */
+  .neon-button {
+    @apply relative overflow-hidden;
+    background: linear-gradient(45deg, hsl(var(--crypto-green)), hsl(var(--crypto-blue)));
+    box-shadow: 
+      0 0 20px hsl(var(--crypto-green) / 0.3),
+      inset 0 1px 0 hsl(var(--foreground) / 0.1);
+  }
+
+  .neon-button::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(45deg, hsl(var(--crypto-blue)), hsl(var(--crypto-purple)));
+  }
+
+  .neon-button:hover::before {
+    @apply opacity-100;
+  }
+
+  .neon-button span {
+    @apply relative z-10;
+  }
+
+  /* Matrix rain effect for background */
+  .matrix-bg {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .matrix-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      linear-gradient(90deg, transparent 79px, hsl(var(--matrix-green) / 0.03) 81px, hsl(var(--matrix-green) / 0.03) 82px, transparent 84px),
+      linear-gradient(hsl(var(--matrix-green) / 0.03) 0.5px, transparent 0.5px);
+    background-size: 84px 84px, 84px 84px;
+    animation: matrix-move 20s linear infinite;
+    pointer-events: none;
+  }
+
+  /* Blockchain block styling */
+  .blockchain-block {
+    @apply relative p-6 bg-gradient-to-br from-card to-muted/30 border border-primary/20 rounded-lg;
+    box-shadow: 
+      0 4px 20px hsl(var(--primary) / 0.1),
+      inset 0 1px 0 hsl(var(--foreground) / 0.1);
+  }
+
+  .blockchain-block::before {
+    content: '';
+    @apply absolute top-0 left-4 w-8 h-1 bg-primary rounded-b-full;
+  }
+
+  .blockchain-block::after {
+    content: '';
+    @apply absolute bottom-0 right-4 w-8 h-1 bg-primary/60 rounded-t-full;
+  }
+
+  /* Hash display styling */
+  .hash-display {
+    @apply font-mono text-sm bg-muted/50 border border-primary/20 rounded-md p-3;
+    background-image: linear-gradient(45deg, transparent 25%, hsl(var(--primary) / 0.03) 25%, hsl(var(--primary) / 0.03) 50%, transparent 50%, transparent 75%, hsl(var(--primary) / 0.03) 75%);
+    background-size: 20px 20px;
+  }
+
+  /* Verification badge */
+  .verified-badge {
+    @apply inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-full text-green-400;
+    box-shadow: 0 0 15px hsl(120 100% 50% / 0.2);
+  }
+
+  .unverified-badge {
+    @apply inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-red-500/20 to-rose-500/20 border border-red-500/30 rounded-full text-red-400;
+    box-shadow: 0 0 15px hsl(0 100% 50% / 0.2);
+  }
+
+  /* Crypto gradient text */
+  .crypto-gradient-text {
+    @apply bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 bg-clip-text text-transparent;
+  }
+
+  /* Hexagon pattern overlay */
+  .hex-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300ff88' fill-opacity='0.03'%3E%3Cpath d='M50 0l43.3 25v50L50 100 6.7 75V25z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-size: 100px 100px;
+  }
+}
+
+@layer utilities {
+  /* Animation utilities */
+  @keyframes matrix-move {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(84px); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px hsl(var(--primary) / 0.3); }
+    50% { box-shadow: 0 0 30px hsl(var(--primary) / 0.5), 0 0 40px hsl(var(--primary) / 0.3); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes scan-line {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-scan {
+    animation: scan-line 2s ease-in-out infinite;
+  }
+
+  /* Utility classes for the crypto theme */
+  .text-crypto-green { color: hsl(var(--crypto-green)); }
+  .text-crypto-blue { color: hsl(var(--crypto-blue)); }
+  .text-crypto-purple { color: hsl(var(--crypto-purple)); }
+  .text-crypto-orange { color: hsl(var(--crypto-orange)); }
+  .text-crypto-cyan { color: hsl(var(--crypto-cyan)); }
+
+  .bg-crypto-green { background-color: hsl(var(--crypto-green)); }
+  .bg-crypto-blue { background-color: hsl(var(--crypto-blue)); }
+  .bg-crypto-purple { background-color: hsl(var(--crypto-purple)); }
+  .bg-crypto-orange { background-color: hsl(var(--crypto-orange)); }
+  .bg-crypto-cyan { background-color: hsl(var(--crypto-cyan)); }
+
+  .border-crypto-green { border-color: hsl(var(--crypto-green)); }
+  .border-crypto-blue { border-color: hsl(var(--crypto-blue)); }
+  .border-crypto-purple { border-color: hsl(var(--crypto-purple)); }
+  .border-crypto-orange { border-color: hsl(var(--crypto-orange)); }
+  .border-crypto-cyan { border-color: hsl(var(--crypto-cyan)); }
 }

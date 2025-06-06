@@ -1,10 +1,11 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Shield, Check, X, FileText } from 'lucide-react';
+import { Shield, Check, X, FileText, Scan } from 'lucide-react';
 import { generateHashForVerification, generateFileHash } from '@/utils/cryptoUtils';
 import { toast } from '@/hooks/use-toast';
 import MediaUpload from './MediaUpload';
@@ -72,29 +73,37 @@ const HashVerification = () => {
     if (!verificationResult) return null;
 
     return (
-      <div className={`border rounded-lg p-4 ${verificationResult.verified ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-        <div className="flex items-center gap-2 mb-2">
+      <div className={`crypto-card p-6 ${verificationResult.verified ? 'verified-badge' : 'unverified-badge'} bg-opacity-10`}>
+        <div className="flex items-center gap-3 mb-4">
           {verificationResult.verified ? (
-            <Check className="h-5 w-5 text-green-600" />
+            <div className="flex items-center gap-2">
+              <Check className="h-6 w-6 text-crypto-green animate-pulse-glow" />
+              <span className="verified-badge font-semibold">
+                Verified
+              </span>
+            </div>
           ) : (
-            <X className="h-5 w-5 text-red-600" />
+            <div className="flex items-center gap-2">
+              <X className="h-6 w-6 text-red-400 animate-pulse" />
+              <span className="unverified-badge font-semibold">
+                Mismatch
+              </span>
+            </div>
           )}
-          <Badge variant={verificationResult.verified ? "default" : "destructive"}>
-            {verificationResult.verified ? "Verified" : "Mismatch"}
-          </Badge>
         </div>
-        <div className="space-y-2">
+        <div className="space-y-4">
           <div>
-            <span className="text-sm font-medium">Generated Hash:</span>
-            <code className="block text-xs font-mono mt-1 p-2 bg-white rounded border">
+            <span className="text-sm font-medium text-muted-foreground">Generated Hash:</span>
+            <div className="hash-display mt-2 relative overflow-hidden">
               {verificationResult.generatedHash}
-            </code>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/20 to-transparent animate-scan"></div>
+            </div>
           </div>
           <div>
-            <span className="text-sm font-medium">Expected Hash:</span>
-            <code className="block text-xs font-mono mt-1 p-2 bg-white rounded border">
+            <span className="text-sm font-medium text-muted-foreground">Expected Hash:</span>
+            <div className="hash-display mt-2">
               {expectedHash}
-            </code>
+            </div>
           </div>
         </div>
       </div>
@@ -105,56 +114,70 @@ const HashVerification = () => {
   const hasContent = content.trim() || selectedFile;
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Shield className="h-5 w-5 text-blue-600" />
-          Hash Verification
+    <Card className="w-full max-w-4xl mx-auto crypto-card hex-pattern">
+      <CardHeader className="relative">
+        <CardTitle className="flex items-center gap-3">
+          <div className="p-2 bg-gradient-to-br from-crypto-green/20 to-crypto-blue/20 rounded-lg border border-primary/30">
+            <Shield className="h-6 w-6 text-crypto-green animate-pulse-glow" />
+          </div>
+          <span className="crypto-gradient-text text-2xl font-bold">Hash Verification</span>
         </CardTitle>
+        <div className="absolute top-4 right-4">
+          <div className="w-3 h-3 bg-crypto-green rounded-full animate-pulse"></div>
+        </div>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <Input
-          placeholder="Title (used as hash key)"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="text-lg font-medium"
-        />
+      <CardContent className="space-y-6">
+        <div className="crypto-input">
+          <Input
+            placeholder="Title (cryptographic key identifier)"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="text-lg font-medium bg-muted/50 border-primary/30"
+          />
+        </div>
         
         <div className="space-y-4">
-          <div className="flex items-center gap-2 text-sm text-slate-600">
-            <FileText className="h-4 w-4" />
-            <span>Add text content (optional if uploading media)</span>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <FileText className="h-4 w-4 text-crypto-blue" />
+            <span>Content verification (optional if uploading media)</span>
           </div>
           
-          <Textarea
-            placeholder="Enter the content you want to verify..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="min-h-[150px] resize-none"
-          />
+          <div className="crypto-input">
+            <Textarea
+              placeholder="Enter the content to verify against the hash..."
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="min-h-[150px] resize-none bg-muted/50 border-primary/30"
+            />
+          </div>
         </div>
 
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-sm text-slate-600">
-            <Shield className="h-4 w-4" />
-            <span>Upload media (optional - will be hashed for verification)</span>
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Shield className="h-4 w-4 text-crypto-purple" />
+            <span>Media verification (optional - hash will be computed)</span>
           </div>
-          <MediaUpload 
-            onMediaSelected={setSelectedFile} 
-            selectedFile={selectedFile}
-          />
+          <div className="blockchain-block">
+            <MediaUpload 
+              onMediaSelected={setSelectedFile} 
+              selectedFile={selectedFile}
+            />
+          </div>
         </div>
         
-        <Input
-          placeholder="Expected Hash"
-          value={expectedHash}
-          onChange={(e) => setExpectedHash(e.target.value)}
-        />
+        <div className="crypto-input">
+          <Input
+            placeholder="Expected Hash (SHA-256)"
+            value={expectedHash}
+            onChange={(e) => setExpectedHash(e.target.value)}
+            className="font-mono bg-muted/50 border-primary/30"
+          />
+        </div>
         
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             {content && (
-              <Badge variant="outline" className="text-sm">
+              <Badge variant="outline" className="border-crypto-green/30 text-crypto-green bg-crypto-green/10">
                 {wordCount} words
               </Badge>
             )}
@@ -164,31 +187,37 @@ const HashVerification = () => {
             <Button 
               onClick={handleVerify}
               disabled={!title.trim() || !hasContent || !expectedHash.trim() || isVerifying}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              className="neon-button text-white font-semibold px-6 py-3"
             >
-              {isVerifying ? (
-                <>
-                  <Shield className="h-4 w-4 mr-2 animate-spin" />
-                  Verifying...
-                </>
-              ) : (
-                <>
-                  <Shield className="h-4 w-4 mr-2" />
-                  Verify Hash
-                </>
-              )}
+              <span className="flex items-center gap-2">
+                {isVerifying ? (
+                  <>
+                    <Scan className="h-5 w-5 animate-spin" />
+                    Verifying...
+                  </>
+                ) : (
+                  <>
+                    <Shield className="h-5 w-5" />
+                    Verify Hash
+                  </>
+                )}
+              </span>
             </Button>
             
-            <Button variant="outline" onClick={clearForm}>
+            <Button 
+              variant="outline" 
+              onClick={clearForm}
+              className="border-primary/30 hover:bg-primary/10 hover:border-primary/50 transition-all duration-300"
+            >
               Clear Form
             </Button>
           </div>
         </div>
         
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-          <p className="text-sm text-blue-800">
-            <strong>Verification:</strong> Enter the same title and content/media used when creating the proof. 
-            The generated hash will be compared against your expected hash.
+        <div className="blockchain-block bg-gradient-to-r from-crypto-blue/10 to-crypto-purple/10 border-crypto-blue/20">
+          <p className="text-sm text-muted-foreground">
+            <strong className="text-crypto-blue">Verification Protocol:</strong> Enter the same title and content/media used when creating the proof. 
+            The cryptographic hash will be computed and compared against your expected hash for integrity validation.
           </p>
         </div>
         
