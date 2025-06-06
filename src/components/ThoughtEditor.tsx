@@ -39,17 +39,17 @@ const ThoughtEditor = ({ onSubmit }: ThoughtEditorProps) => {
   const hasContent = content.trim() || selectedFile;
 
   return (
-    <Card className="w-full max-w-4xl mx-auto crypto-card hex-pattern">
+    <Card className="w-full max-w-4xl mx-auto crypto-card circuit-pattern">
       <CardHeader className="relative">
         <CardTitle className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-crypto-purple/20 to-crypto-blue/20 rounded-lg border border-primary/30">
-            <Hash className="h-6 w-6 text-crypto-purple animate-pulse-glow" />
+          <div className="p-2 bg-gradient-to-br from-crypto-green/20 to-crypto-blue/20 rounded-lg border border-primary/30">
+            <Hash className="h-6 w-6 text-crypto-green animate-pulse-glow" />
           </div>
           <span className="crypto-gradient-text text-2xl font-bold">Create Immutable Proof</span>
         </CardTitle>
         <div className="absolute top-4 right-4 flex gap-2">
-          <div className="w-3 h-3 bg-crypto-purple rounded-full animate-pulse"></div>
-          <div className="w-3 h-3 bg-crypto-green rounded-full animate-pulse delay-150"></div>
+          <div className="w-3 h-3 bg-crypto-green rounded-full animate-pulse"></div>
+          <div className="w-3 h-3 bg-crypto-blue rounded-full animate-pulse delay-150"></div>
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -83,7 +83,7 @@ const ThoughtEditor = ({ onSubmit }: ThoughtEditorProps) => {
 
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Hash className="h-4 w-4 text-crypto-green" />
+            <Hash className="h-4 w-4 text-crypto-cyan" />
             <span>Media attachment (optional - only hash stored on-chain)</span>
           </div>
           <div className="blockchain-block">

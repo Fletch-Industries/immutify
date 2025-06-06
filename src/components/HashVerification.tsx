@@ -114,7 +114,7 @@ const HashVerification = () => {
   const hasContent = content.trim() || selectedFile;
 
   return (
-    <Card className="w-full max-w-4xl mx-auto crypto-card hex-pattern">
+    <Card className="w-full max-w-4xl mx-auto crypto-card circuit-pattern">
       <CardHeader className="relative">
         <CardTitle className="flex items-center gap-3">
           <div className="p-2 bg-gradient-to-br from-crypto-green/20 to-crypto-blue/20 rounded-lg border border-primary/30">
@@ -154,7 +154,7 @@ const HashVerification = () => {
 
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Shield className="h-4 w-4 text-crypto-purple" />
+            <Shield className="h-4 w-4 text-crypto-cyan" />
             <span>Media verification (optional - hash will be computed)</span>
           </div>
           <div className="blockchain-block">
@@ -214,7 +214,7 @@ const HashVerification = () => {
           </div>
         </div>
         
-        <div className="blockchain-block bg-gradient-to-r from-crypto-blue/10 to-crypto-purple/10 border-crypto-blue/20">
+        <div className="blockchain-block bg-gradient-to-r from-crypto-blue/10 to-crypto-cyan/10 border-crypto-blue/20">
           <p className="text-sm text-muted-foreground">
             <strong className="text-crypto-blue">Verification Protocol:</strong> Enter the same title and content/media used when creating the proof. 
             The cryptographic hash will be computed and compared against your expected hash for integrity validation.
