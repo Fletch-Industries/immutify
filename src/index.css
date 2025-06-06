@@ -130,6 +130,11 @@
     @apply border-border;
   }
 
+  html, body {
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
@@ -369,4 +374,13 @@
   .border-theme-purple { border-color: hsl(var(--theme-purple)); }
   .border-theme-orange { border-color: hsl(var(--theme-orange)); }
   .border-theme-yellow { border-color: hsl(var(--theme-yellow)); }
+
+  /* Scroll prevention utilities */
+  .overscroll-none {
+    overscroll-behavior: none;
+  }
+
+  .overscroll-contain {
+    overscroll-behavior: contain;
+  }
 }

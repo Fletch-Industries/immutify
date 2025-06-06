@@ -149,98 +149,100 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 relative overflow-hidden">
+    <div className="min-h-screen max-h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 relative">
       {/* Simple background pattern - no glows */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width=%2260%22%20height=%2260%22%20viewBox=%220%200%2060%2060%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg%20fill=%22none%22%20fill-rule=%22evenodd%22%3E%3Cg%20fill=%22%239C92AC%22%20fill-opacity=%220.05%22%3E%3Ccircle%20cx=%2230%22%20cy=%2230%22%20r=%224%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
 
-      <div className="container mx-auto px-4 py-8 relative z-10">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-block relative">
-            <h1 className="text-6xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mb-6 tracking-tight">
-              Immutify
-            </h1>
-          </div>
-          
-          <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            Publish your ideas with{" "}
-            <span className="text-cyan-400 font-semibold">cryptographic proof</span>{" "}
-            of existence. Create a verifiable timestamp without revealing your content to the world.
-          </p>
-          
-          {/* Feature highlights - no glows */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12">
-            <div className="group relative">
-              <div className="relative bg-slate-800/50 border border-slate-700/50 rounded-lg p-6 backdrop-blur-sm">
-                <Shield className="h-8 w-8 text-cyan-400 mx-auto mb-3" />
-                <h3 className="text-slate-200 font-semibold mb-2">Immutable Proof</h3>
-                <p className="text-slate-400 text-sm">Your ideas are cryptographically secured on the blockchain</p>
-              </div>
+      <div className="h-full overflow-y-auto overscroll-none">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 relative z-10">
+          {/* Header */}
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <div className="inline-block relative">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-blue-400 bg-clip-text text-transparent mb-4 sm:mb-6 tracking-tight">
+                Immutify
+              </h1>
             </div>
             
-            <div className="group relative">
-              <div className="relative bg-slate-800/50 border border-slate-700/50 rounded-lg p-6 backdrop-blur-sm">
-                <Lock className="h-8 w-8 text-purple-400 mx-auto mb-3" />
-                <h3 className="text-slate-200 font-semibold mb-2">Private by Design</h3>
-                <p className="text-slate-400 text-sm">Only you know the content, the world sees the proof</p>
-              </div>
-            </div>
+            <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed mb-6 sm:mb-8 px-4">
+              Publish your ideas with{" "}
+              <span className="text-cyan-400 font-semibold">cryptographic proof</span>{" "}
+              of existence. Create a verifiable timestamp without revealing your content to the world.
+            </p>
             
-            <div className="group relative">
-              <div className="relative bg-slate-800/50 border border-slate-700/50 rounded-lg p-6 backdrop-blur-sm">
-                <Database className="h-8 w-8 text-blue-400 mx-auto mb-3" />
-                <h3 className="text-slate-200 font-semibold mb-2">Decentralized</h3>
-                <p className="text-slate-400 text-sm">No central authority, no single point of failure</p>
+            {/* Feature highlights - mobile optimized */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto mt-8 sm:mt-12">
+              <div className="group relative">
+                <div className="relative bg-slate-800/50 border border-slate-700/50 rounded-lg p-4 sm:p-6 backdrop-blur-sm">
+                  <Shield className="h-6 w-6 sm:h-8 sm:w-8 text-cyan-400 mx-auto mb-2 sm:mb-3" />
+                  <h3 className="text-slate-200 font-semibold mb-2 text-sm sm:text-base">Immutable Proof</h3>
+                  <p className="text-slate-400 text-xs sm:text-sm">Your ideas are cryptographically secured on the blockchain</p>
+                </div>
+              </div>
+              
+              <div className="group relative">
+                <div className="relative bg-slate-800/50 border border-slate-700/50 rounded-lg p-4 sm:p-6 backdrop-blur-sm">
+                  <Lock className="h-6 w-6 sm:h-8 sm:w-8 text-purple-400 mx-auto mb-2 sm:mb-3" />
+                  <h3 className="text-slate-200 font-semibold mb-2 text-sm sm:text-base">Private by Design</h3>
+                  <p className="text-slate-400 text-xs sm:text-sm">Only you know the content, the world sees the proof</p>
+                </div>
+              </div>
+              
+              <div className="group relative sm:col-span-2 lg:col-span-1">
+                <div className="relative bg-slate-800/50 border border-slate-700/50 rounded-lg p-4 sm:p-6 backdrop-blur-sm">
+                  <Database className="h-6 w-6 sm:h-8 sm:w-8 text-blue-400 mx-auto mb-2 sm:mb-3" />
+                  <h3 className="text-slate-200 font-semibold mb-2 text-sm sm:text-base">Decentralized</h3>
+                  <p className="text-slate-400 text-xs sm:text-sm">No central authority, no single point of failure</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Main Content with Tabs - no glows */}
-        <div className="relative">
-          <div className="relative bg-slate-800/30 border border-slate-700/50 rounded-2xl backdrop-blur-xl p-8">
-            <Tabs defaultValue="create" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 mb-8 bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
-                <TabsTrigger 
-                  value="create" 
-                  className="data-[state=active]:bg-slate-700 data-[state=active]:text-slate-100 text-slate-300 hover:text-slate-200 transition-all duration-200"
-                >
-                  Create Proof
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="verify" 
-                  className="data-[state=active]:bg-slate-700 data-[state=active]:text-slate-100 text-slate-300 hover:text-slate-200 transition-all duration-200"
-                >
-                  Verify Hash
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="browse" 
-                  className="data-[state=active]:bg-slate-700 data-[state=active]:text-slate-100 text-slate-300 hover:text-slate-200 transition-all duration-200"
-                >
-                  Browse Tokens
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="create" className="space-y-6">
-                <ThoughtEditor onSubmit={handleSubmitThought} />
-              </TabsContent>
-              
-              <TabsContent value="verify" className="space-y-6">
-                <HashVerification />
-              </TabsContent>
-              
-              <TabsContent value="browse" className="space-y-6">
-                <TokenBrowser />
-              </TabsContent>
-            </Tabs>
+          {/* Main Content with Tabs - mobile optimized */}
+          <div className="relative">
+            <div className="relative bg-slate-800/30 border border-slate-700/50 rounded-2xl backdrop-blur-xl p-4 sm:p-6 lg:p-8">
+              <Tabs defaultValue="create" className="w-full">
+                <TabsList className="grid w-full grid-cols-3 mb-6 sm:mb-8 bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
+                  <TabsTrigger 
+                    value="create" 
+                    className="data-[state=active]:bg-slate-700 data-[state=active]:text-slate-100 text-slate-300 hover:text-slate-200 transition-all duration-200 text-xs sm:text-sm"
+                  >
+                    Create Proof
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="verify" 
+                    className="data-[state=active]:bg-slate-700 data-[state=active]:text-slate-100 text-slate-300 hover:text-slate-200 transition-all duration-200 text-xs sm:text-sm"
+                  >
+                    Verify Hash
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="browse" 
+                    className="data-[state=active]:bg-slate-700 data-[state=active]:text-slate-100 text-slate-300 hover:text-slate-200 transition-all duration-200 text-xs sm:text-sm"
+                  >
+                    Browse Tokens
+                  </TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="create" className="space-y-4 sm:space-y-6">
+                  <ThoughtEditor onSubmit={handleSubmitThought} />
+                </TabsContent>
+                
+                <TabsContent value="verify" className="space-y-4 sm:space-y-6">
+                  <HashVerification />
+                </TabsContent>
+                
+                <TabsContent value="browse" className="space-y-4 sm:space-y-6">
+                  <TokenBrowser />
+                </TabsContent>
+              </Tabs>
+            </div>
           </div>
-        </div>
 
-        {/* Footer */}
-        <div className="text-center mt-16 pb-8">
-          <p className="text-slate-500 text-sm">
-            Powered by blockchain technology • Built for creators and innovators
-          </p>
+          {/* Footer */}
+          <div className="text-center mt-12 sm:mt-16 pb-6 sm:pb-8">
+            <p className="text-slate-500 text-xs sm:text-sm">
+              Powered by blockchain technology • Built for creators and innovators
+            </p>
+          </div>
         </div>
       </div>
 
