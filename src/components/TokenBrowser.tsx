@@ -118,8 +118,8 @@ const TokenBrowser = () => {
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <Search className="h-5 w-5 text-green-600" />
+            <CardTitle className="flex items-center gap-2 text-foreground">
+              <Search className="h-5 w-5 text-theme-primary" />
               Blockchain Token Browser
             </CardTitle>
             <div className="flex items-center gap-2">
@@ -158,13 +158,13 @@ const TokenBrowser = () => {
         <CardContent>
           {isLoading && currentPage === 1 ? (
             <div className="text-center py-8">
-              <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-gray-400" />
-              <p className="text-gray-600">Loading tokens from blockchain...</p>
+              <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground">Loading tokens from blockchain...</p>
             </div>
           ) : tokens.length === 0 ? (
             <div className="text-center py-8">
-              <Search className="h-8 w-8 mx-auto mb-4 text-gray-400" />
-              <p className="text-gray-600">No tokens found on the blockchain.</p>
+              <Search className="h-8 w-8 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground">No tokens found on the blockchain.</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -194,11 +194,11 @@ const TokenBrowser = () => {
                 </div>
               </div>
               {tokens.map((token, index) => (
-                <div key={`${token.token.txid}-${token.token.outputIndex}`} className="border rounded-lg p-4">
+                <div key={`${token.token.txid}-${token.token.outputIndex}`} className="border border-border rounded-lg p-4 bg-card">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm font-medium">
+                        <span className="text-sm font-medium text-foreground">
                           Token #{(currentPage - 1) * limit + index + 1}
                         </span>
                         <Badge variant="outline">
@@ -207,9 +207,9 @@ const TokenBrowser = () => {
                       </div>
                       <div className="space-y-2">
                         <div>
-                          <span className="text-sm font-medium text-gray-600">Message (Hash):</span>
+                          <span className="text-sm font-medium text-muted-foreground">Message (Hash):</span>
                           <div className="flex items-center gap-2 mt-1">
-                            <code className="text-xs font-mono bg-gray-100 px-2 py-1 rounded flex-1 break-all">
+                            <code className="text-xs font-mono bg-muted px-2 py-1 rounded flex-1 break-all text-muted-foreground">
                               {token.message}
                             </code>
                             <Button
@@ -218,7 +218,7 @@ const TokenBrowser = () => {
                               onClick={() => copyHash(token.message)}
                             >
                               {copiedHash === token.message ? (
-                                <Check className="h-4 w-4 text-green-600" />
+                                <Check className="h-4 w-4 text-theme-primary" />
                               ) : (
                                 <Copy className="h-4 w-4" />
                               )}
@@ -226,12 +226,12 @@ const TokenBrowser = () => {
                           </div>
                         </div>
                         <div>
-                          <span className="text-sm font-medium text-gray-600">Transaction ID:</span>
-                          <code className="block text-xs font-mono bg-gray-100 px-2 py-1 rounded mt-1 break-all">
+                          <span className="text-sm font-medium text-muted-foreground">Transaction ID:</span>
+                          <code className="block text-xs font-mono bg-muted px-2 py-1 rounded mt-1 break-all text-muted-foreground">
                             {token.token.txid}
                           </code>
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-muted-foreground">
                           Output Index: {token.token.outputIndex}
                         </div>
                       </div>
@@ -241,7 +241,7 @@ const TokenBrowser = () => {
               ))}
               {isLoading && currentPage > 1 && (
                 <div className="text-center py-4">
-                  <RefreshCw className="h-6 w-6 animate-spin mx-auto text-gray-400" />
+                  <RefreshCw className="h-6 w-6 animate-spin mx-auto text-muted-foreground" />
                 </div>
               )}
             </div>
