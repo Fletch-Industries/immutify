@@ -57,25 +57,27 @@ const Index = () => {
       let dataToSubmit: string;
       let hash: string;
 
-      if (thoughtData.mediaFile) {
-        // If there's a media file, always hash it (even in public mode)
-        hash = await generateFileHash(thoughtData.mediaFile, thoughtData.title);
-        dataToSubmit = hash;
-        
-        // If there's also text content and it's public mode, append it
-        if (thoughtData.content && !thoughtData.isPrivate) {
-          const publicContent = `${thoughtData.title}: ${thoughtData.content}`;
-          dataToSubmit = `${hash} | ${publicContent}`;
-        }
-      } else if (thoughtData.isPrivate) {
-        // Generate cryptographic hash for private text-only thoughts
-        hash = await generateHash(thoughtData);
+      // Always generate combined hash of title, content, and media
+      hash = await generateHash(thoughtData);
+      
+      if (thoughtData.isPrivate) {
+        // For private thoughts, submit only the hash
         dataToSubmit = hash;
       } else {
-        // For public text-only thoughts, submit the full content directly
-        const publicContent = `${thoughtData.title}: ${thoughtData.content}`;
-        dataToSubmit = publicContent;
-        hash = dataToSubmit; // Store the full content as the "hash" for display
+        // For public thoughts, submit the content but still use combined hash
+        if (thoughtData.mediaFile && thoughtData.content) {
+          // Both media and content: submit hash + content
+          const publicContent = `${thoughtData.title}: ${thoughtData.content}`;
+          dataToSubmit = `${hash} | ${publicContent}`;
+        } else if (thoughtData.mediaFile) {
+          // Media only: submit hash
+          dataToSubmit = hash;
+        } else {
+          // Text only: submit full content
+          const publicContent = `${thoughtData.title}: ${thoughtData.content}`;
+          dataToSubmit = publicContent;
+          hash = dataToSubmit; // Store the full content as the "hash" for display
+        }
       }
       
       const newThought: Thought = {

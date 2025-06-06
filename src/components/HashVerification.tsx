@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -31,30 +30,22 @@ const HashVerification = () => {
     setIsVerifying(true);
     
     try {
-      let generatedHash: string;
-
-      if (selectedFile) {
-        // If there's a media file, hash it (similar to Create Proof logic)
-        generatedHash = await generateFileHash(selectedFile, title);
-        
-        // If there's also text content, we need to combine them somehow
-        // For now, we'll just use the file hash as the primary hash
-        // This matches the Create Proof behavior where file hash takes precedence
-      } else {
-        // Text-only verification
-        generatedHash = await generateHashForVerification(title, content);
-      }
+      // Generate combined hash of title, content, and media
+      const generatedHash = await generateHashForVerification(title, content, selectedFile || undefined);
 
       const verified = generatedHash === expectedHash.trim();
       
       setVerificationResult({ verified, generatedHash });
       
       const hasMedia = selectedFile ? " with media" : "";
+      const hasContent = content.trim() ? " with content" : "";
+      const description = `title${hasContent}${hasMedia}`;
+      
       toast({
         title: verified ? "Hash Verified!" : "Hash Mismatch",
         description: verified 
-          ? `The hash matches your input data${hasMedia}.` 
-          : `The generated hash doesn't match the expected hash${hasMedia}.`,
+          ? `The hash matches your ${description}.` 
+          : `The generated hash doesn't match the expected hash for your ${description}.`,
         variant: verified ? "default" : "destructive"
       });
     } catch (error) {

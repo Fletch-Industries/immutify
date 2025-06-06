@@ -1,4 +1,3 @@
-
 import { createToken, queryTokens } from 'hello-tokens';
 import { Hash } from '@bsv/sdk';
 
@@ -20,18 +19,72 @@ export interface HelloWorldToken {
 }
 
 export const generateHash = async (data: ThoughtData): Promise<string> => {  
-  // Use BSV SDK HMAC implementation with title as key
   let hmacHasher = new Hash.SHA256HMAC(data.title);
-  hmacHasher.update(data.content);
+  
+  // Add content to hash
+  if (data.content) {
+    hmacHasher.update(data.content);
+  }
+  
+  // Add media file to hash if present
+  if (data.mediaFile) {
+    const fileData = await readFileAsNumberArray(data.mediaFile);
+    hmacHasher.update(fileData);
+  }
+  
   let hmacMessageHex = hmacHasher.digestHex();
   
-  console.log('Generated hash for message:', data.content);
+  console.log('Generated combined hash for:', {
+    title: data.title,
+    hasContent: !!data.content,
+    hasMedia: !!data.mediaFile
+  });
   console.log('Hash:', hmacMessageHex);
   
   return hmacMessageHex;
 };
 
 export const generateFileHash = async (file: File, title: string): Promise<string> => {
+  const fileData = await readFileAsNumberArray(file);
+  
+  let hmacHasher = new Hash.SHA256HMAC(title);
+  hmacHasher.update(fileData);
+  let hmacMessageHex = hmacHasher.digestHex();
+  
+  console.log('Generated hash for file:', file.name);
+  console.log('File hash:', hmacMessageHex);
+  
+  return hmacMessageHex;
+};
+
+export const generateHashForVerification = async (title: string, content: string, mediaFile?: File): Promise<string> => {  
+  let hmacHasher = new Hash.SHA256HMAC(title);
+  
+  // Add content to hash
+  if (content) {
+    hmacHasher.update(content);
+  }
+  
+  // Add media file to hash if present
+  if (mediaFile) {
+    const fileData = await readFileAsNumberArray(mediaFile);
+    hmacHasher.update(fileData);
+  }
+  
+  let hmacMessageHex = hmacHasher.digestHex();
+  
+  console.log('Generated verification hash for:', {
+    title,
+    hasContent: !!content,
+    hasMedia: !!mediaFile
+  });
+  console.log('Hash:', hmacMessageHex);
+  
+  return hmacMessageHex;
+};
+
+// Helper function to read file as number array
+const readFileAsNumberArray = (file: File): Promise<number[]> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     
@@ -39,21 +92,10 @@ export const generateFileHash = async (file: File, title: string): Promise<strin
       try {
         const arrayBuffer = e.target?.result as ArrayBuffer;
         const uint8Array = new Uint8Array(arrayBuffer);
-        
-        // Convert Uint8Array to number array for BSV SDK compatibility
         const numberArray = Array.from(uint8Array);
-        
-        // Use BSV SDK HMAC implementation with title as key
-        let hmacHasher = new Hash.SHA256HMAC(title);
-        hmacHasher.update(numberArray);
-        let hmacMessageHex = hmacHasher.digestHex();
-        
-        console.log('Generated hash for file:', file.name);
-        console.log('File hash:', hmacMessageHex);
-        
-        resolve(hmacMessageHex);
+        resolve(numberArray);
       } catch (error) {
-        console.error('Error generating file hash:', error);
+        console.error('Error reading file:', error);
         reject(error);
       }
     };
@@ -64,15 +106,6 @@ export const generateFileHash = async (file: File, title: string): Promise<strin
     
     reader.readAsArrayBuffer(file);
   });
-};
-
-export const generateHashForVerification = async (title: string, content: string): Promise<string> => {  
-  // Use BSV SDK HMAC implementation with title as key
-  let hmacHasher = new Hash.SHA256HMAC(title);
-  hmacHasher.update(content);
-  let hmacMessageHex = hmacHasher.digestHex();
-  
-  return hmacMessageHex;
 };
 
 export const submitToBlockchain = async (data: string): Promise<string> => {
