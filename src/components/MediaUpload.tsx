@@ -78,8 +78,8 @@ const MediaUpload = ({ onMediaSelected, selectedFile }: MediaUploadProps) => {
         <Card 
           className={`border-2 border-dashed transition-colors cursor-pointer ${
             dragActive 
-              ? 'border-purple-400 bg-purple-50/50' 
-              : 'border-slate-300 hover:border-purple-300 hover:bg-slate-50/50'
+              ? 'border-theme-primary bg-theme-primary/5' 
+              : 'border-border hover:border-theme-primary/60 hover:bg-theme-primary/5'
           }`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
@@ -88,23 +88,23 @@ const MediaUpload = ({ onMediaSelected, selectedFile }: MediaUploadProps) => {
           onClick={() => fileInputRef.current?.click()}
         >
           <CardContent className="flex flex-col items-center justify-center py-8 text-center">
-            <Upload className="h-8 w-8 text-slate-400 mb-4" />
-            <p className="text-slate-600 mb-2">
+            <Upload className="h-8 w-8 text-muted-foreground mb-4" />
+            <p className="text-foreground mb-2">
               Drag and drop a file here, or click to select
             </p>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-muted-foreground">
               Supports images, videos, audio, PDFs, and text files
             </p>
           </CardContent>
         </Card>
       ) : (
-        <Card className="bg-slate-50 border border-slate-200">
+        <Card className="bg-card border-border">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 {getFileIcon(selectedFile)}
                 <div>
-                  <p className="font-medium text-slate-700 truncate max-w-xs">
+                  <p className="font-medium text-foreground truncate max-w-xs">
                     {selectedFile.name}
                   </p>
                   <Badge variant="outline" className="text-xs">
@@ -116,7 +116,7 @@ const MediaUpload = ({ onMediaSelected, selectedFile }: MediaUploadProps) => {
                 variant="ghost"
                 size="sm"
                 onClick={removeFile}
-                className="text-slate-500 hover:text-red-500"
+                className="text-muted-foreground hover:text-destructive"
               >
                 <X className="h-4 w-4" />
               </Button>
