@@ -5,32 +5,24 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, Check, X, FileText, Upload } from 'lucide-react';
+import { Shield, Check, X, FileText } from 'lucide-react';
 import { generateHashForVerification, generateFileHash } from '@/utils/cryptoUtils';
 import { toast } from '@/hooks/use-toast';
 import MediaUpload from './MediaUpload';
 
 const HashVerification = () => {
-  // Text verification state
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [expectedHash, setExpectedHash] = useState('');
   const [verificationResult, setVerificationResult] = useState<{ verified: boolean; generatedHash: string } | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
 
-  // File verification state
-  const [fileTitle, setFileTitle] = useState('');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [fileExpectedHash, setFileExpectedHash] = useState('');
-  const [fileVerificationResult, setFileVerificationResult] = useState<{ verified: boolean; generatedHash: string } | null>(null);
-  const [isVerifyingFile, setIsVerifyingFile] = useState(false);
-
-  const handleVerifyText = async () => {
-    if (!title.trim() || !content.trim() || !expectedHash.trim()) {
+  const handleVerify = async () => {
+    if (!title.trim() || (!content.trim() && !selectedFile) || !expectedHash.trim()) {
       toast({
         title: "Missing Information",
-        description: "Please fill in all fields to verify the hash.",
+        description: "Please provide a title, content or file, and the expected hash to verify.",
         variant: "destructive"
       });
       return;
@@ -39,16 +31,30 @@ const HashVerification = () => {
     setIsVerifying(true);
     
     try {
-      const generatedHash = await generateHashForVerification(title, content);
+      let generatedHash: string;
+
+      if (selectedFile) {
+        // If there's a media file, hash it (similar to Create Proof logic)
+        generatedHash = await generateFileHash(selectedFile, title);
+        
+        // If there's also text content, we need to combine them somehow
+        // For now, we'll just use the file hash as the primary hash
+        // This matches the Create Proof behavior where file hash takes precedence
+      } else {
+        // Text-only verification
+        generatedHash = await generateHashForVerification(title, content);
+      }
+
       const verified = generatedHash === expectedHash.trim();
       
       setVerificationResult({ verified, generatedHash });
       
+      const hasMedia = selectedFile ? " with media" : "";
       toast({
         title: verified ? "Hash Verified!" : "Hash Mismatch",
         description: verified 
-          ? "The hash matches your input data." 
-          : "The generated hash doesn't match the expected hash.",
+          ? `The hash matches your input data${hasMedia}.` 
+          : `The generated hash doesn't match the expected hash${hasMedia}.`,
         variant: verified ? "default" : "destructive"
       });
     } catch (error) {
@@ -63,77 +69,34 @@ const HashVerification = () => {
     }
   };
 
-  const handleVerifyFile = async () => {
-    if (!fileTitle.trim() || !selectedFile || !fileExpectedHash.trim()) {
-      toast({
-        title: "Missing Information",
-        description: "Please provide a title, select a file, and enter the expected hash.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsVerifyingFile(true);
-    
-    try {
-      const generatedHash = await generateFileHash(selectedFile, fileTitle);
-      const verified = generatedHash === fileExpectedHash.trim();
-      
-      setFileVerificationResult({ verified, generatedHash });
-      
-      toast({
-        title: verified ? "File Hash Verified!" : "File Hash Mismatch",
-        description: verified 
-          ? "The file hash matches the expected hash." 
-          : "The generated file hash doesn't match the expected hash.",
-        variant: verified ? "default" : "destructive"
-      });
-    } catch (error) {
-      console.error('File verification error:', error);
-      toast({
-        title: "File Verification Error",
-        description: "Failed to verify file hash. Please check your inputs.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsVerifyingFile(false);
-    }
-  };
-
-  const clearTextForm = () => {
+  const clearForm = () => {
     setTitle('');
     setContent('');
+    setSelectedFile(null);
     setExpectedHash('');
     setVerificationResult(null);
   };
 
-  const clearFileForm = () => {
-    setFileTitle('');
-    setSelectedFile(null);
-    setFileExpectedHash('');
-    setFileVerificationResult(null);
-  };
-
-  const renderVerificationResult = (result: { verified: boolean; generatedHash: string } | null, expectedHash: string) => {
-    if (!result) return null;
+  const renderVerificationResult = () => {
+    if (!verificationResult) return null;
 
     return (
-      <div className={`border rounded-lg p-4 ${result.verified ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+      <div className={`border rounded-lg p-4 ${verificationResult.verified ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
         <div className="flex items-center gap-2 mb-2">
-          {result.verified ? (
+          {verificationResult.verified ? (
             <Check className="h-5 w-5 text-green-600" />
           ) : (
             <X className="h-5 w-5 text-red-600" />
           )}
-          <Badge variant={result.verified ? "default" : "destructive"}>
-            {result.verified ? "Verified" : "Mismatch"}
+          <Badge variant={verificationResult.verified ? "default" : "destructive"}>
+            {verificationResult.verified ? "Verified" : "Mismatch"}
           </Badge>
         </div>
         <div className="space-y-2">
           <div>
             <span className="text-sm font-medium">Generated Hash:</span>
             <code className="block text-xs font-mono mt-1 p-2 bg-white rounded border">
-              {result.generatedHash}
+              {verificationResult.generatedHash}
             </code>
           </div>
           <div>
@@ -147,6 +110,9 @@ const HashVerification = () => {
     );
   };
 
+  const wordCount = content.split(/\s+/).filter(word => word.length > 0).length;
+  const hasContent = content.trim() || selectedFile;
+
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
@@ -155,111 +121,87 @@ const HashVerification = () => {
           Hash Verification
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="text" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="text" className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              Text Content
-            </TabsTrigger>
-            <TabsTrigger value="file" className="flex items-center gap-2">
-              <Upload className="h-4 w-4" />
-              File Upload
-            </TabsTrigger>
-          </TabsList>
+      <CardContent className="space-y-4">
+        <Input
+          placeholder="Title (used as hash key)"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="text-lg font-medium"
+        />
+        
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 text-sm text-slate-600">
+            <FileText className="h-4 w-4" />
+            <span>Add text content (optional if uploading media)</span>
+          </div>
           
-          <TabsContent value="text" className="space-y-4">
-            <Input
-              placeholder="Title (used as hash key)"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-            
-            <Textarea
-              placeholder="Content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="min-h-[150px]"
-            />
-            
-            <Input
-              placeholder="Expected Hash"
-              value={expectedHash}
-              onChange={(e) => setExpectedHash(e.target.value)}
-            />
-            
-            <div className="flex items-center gap-4">
-              <Button 
-                onClick={handleVerifyText}
-                disabled={isVerifying}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-              >
-                {isVerifying ? (
-                  <>
-                    <Shield className="h-4 w-4 mr-2 animate-spin" />
-                    Verifying...
-                  </>
-                ) : (
-                  <>
-                    <Shield className="h-4 w-4 mr-2" />
-                    Verify Hash
-                  </>
-                )}
-              </Button>
-              
-              <Button variant="outline" onClick={clearTextForm}>
-                Clear Form
-              </Button>
-            </div>
-            
-            {renderVerificationResult(verificationResult, expectedHash)}
-          </TabsContent>
+          <Textarea
+            placeholder="Enter the content you want to verify..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="min-h-[150px] resize-none"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm text-slate-600">
+            <Shield className="h-4 w-4" />
+            <span>Upload media (optional - will be hashed for verification)</span>
+          </div>
+          <MediaUpload 
+            onMediaSelected={setSelectedFile} 
+            selectedFile={selectedFile}
+          />
+        </div>
+        
+        <Input
+          placeholder="Expected Hash"
+          value={expectedHash}
+          onChange={(e) => setExpectedHash(e.target.value)}
+        />
+        
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            {content && (
+              <Badge variant="outline" className="text-sm">
+                {wordCount} words
+              </Badge>
+            )}
+          </div>
           
-          <TabsContent value="file" className="space-y-4">
-            <Input
-              placeholder="Title (used as hash key)"
-              value={fileTitle}
-              onChange={(e) => setFileTitle(e.target.value)}
-            />
+          <div className="flex items-center gap-4">
+            <Button 
+              onClick={handleVerify}
+              disabled={!title.trim() || !hasContent || !expectedHash.trim() || isVerifying}
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+            >
+              {isVerifying ? (
+                <>
+                  <Shield className="h-4 w-4 mr-2 animate-spin" />
+                  Verifying...
+                </>
+              ) : (
+                <>
+                  <Shield className="h-4 w-4 mr-2" />
+                  Verify Hash
+                </>
+              )}
+            </Button>
             
-            <MediaUpload
-              onMediaSelected={setSelectedFile}
-              selectedFile={selectedFile}
-            />
-            
-            <Input
-              placeholder="Expected File Hash"
-              value={fileExpectedHash}
-              onChange={(e) => setFileExpectedHash(e.target.value)}
-            />
-            
-            <div className="flex items-center gap-4">
-              <Button 
-                onClick={handleVerifyFile}
-                disabled={isVerifyingFile}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-              >
-                {isVerifyingFile ? (
-                  <>
-                    <Shield className="h-4 w-4 mr-2 animate-spin" />
-                    Verifying File...
-                  </>
-                ) : (
-                  <>
-                    <Shield className="h-4 w-4 mr-2" />
-                    Verify File Hash
-                  </>
-                )}
-              </Button>
-              
-              <Button variant="outline" onClick={clearFileForm}>
-                Clear Form
-              </Button>
-            </div>
-            
-            {renderVerificationResult(fileVerificationResult, fileExpectedHash)}
-          </TabsContent>
-        </Tabs>
+            <Button variant="outline" onClick={clearForm}>
+              Clear Form
+            </Button>
+          </div>
+        </div>
+        
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <p className="text-sm text-blue-800">
+            <strong>Verification:</strong> Enter the same title and content/media used when creating the proof. 
+            The generated hash will be compared against your expected hash.
+          </p>
+        </div>
+        
+        {renderVerificationResult()}
       </CardContent>
     </Card>
   );
