@@ -39,21 +39,21 @@ const ThoughtEditor = ({ onSubmit }: ThoughtEditorProps) => {
   const hasContent = content.trim() || selectedFile;
 
   return (
-    <Card className="w-full max-w-4xl mx-auto theme-card theme-circuit">
+    <Card className="w-full max-w-4xl mx-auto crypto-card circuit-pattern">
       <CardHeader className="relative">
         <CardTitle className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-theme-primary/20 to-theme-secondary/20 rounded-lg border border-primary/30">
-            <Hash className="h-6 w-6 text-theme-primary animate-pulse-glow" />
+          <div className="p-2 bg-gradient-to-br from-crypto-green/20 to-crypto-blue/20 rounded-lg border border-primary/30">
+            <Hash className="h-6 w-6 text-crypto-green animate-pulse-glow" />
           </div>
-          <span className="theme-gradient-text text-2xl font-bold">Create Immutable Proof</span>
+          <span className="crypto-gradient-text text-2xl font-bold">Create Immutable Proof</span>
         </CardTitle>
         <div className="absolute top-4 right-4 flex gap-2">
-          <div className="w-3 h-3 bg-theme-primary rounded-full animate-pulse"></div>
-          <div className="w-3 h-3 bg-theme-secondary rounded-full animate-pulse delay-150"></div>
+          <div className="w-3 h-3 bg-crypto-green rounded-full animate-pulse"></div>
+          <div className="w-3 h-3 bg-crypto-blue rounded-full animate-pulse delay-150"></div>
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="theme-input">
+        <div className="crypto-input">
           <Input
             placeholder="Enter a cryptographic identifier for your proof..."
             value={title}
@@ -64,11 +64,11 @@ const ThoughtEditor = ({ onSubmit }: ThoughtEditorProps) => {
         
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <FileText className="h-4 w-4 text-theme-secondary" />
+            <FileText className="h-4 w-4 text-crypto-blue" />
             <span>Thought content (optional if uploading media)</span>
           </div>
           
-          <div className="theme-input">
+          <div className="crypto-input">
             <Textarea
               placeholder={isPrivate 
                 ? "Write your idea, process, or thought here. This will be cryptographically hashed and can serve as immutable proof of existence..."
@@ -83,10 +83,10 @@ const ThoughtEditor = ({ onSubmit }: ThoughtEditorProps) => {
 
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Hash className="h-4 w-4 text-theme-accent" />
+            <Hash className="h-4 w-4 text-crypto-cyan" />
             <span>Media attachment (optional - only hash stored on-chain)</span>
           </div>
-          <div className="theme-block">
+          <div className="blockchain-block">
             <MediaUpload 
               onMediaSelected={setSelectedFile} 
               selectedFile={selectedFile}
@@ -97,7 +97,7 @@ const ThoughtEditor = ({ onSubmit }: ThoughtEditorProps) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             {content && (
-              <Badge variant="outline" className="border-theme-primary/30 text-theme-primary bg-theme-primary/10">
+              <Badge variant="outline" className="border-crypto-green/30 text-crypto-green bg-crypto-green/10">
                 {wordCount} words
               </Badge>
             )}
@@ -108,8 +108,8 @@ const ThoughtEditor = ({ onSubmit }: ThoughtEditorProps) => {
               onClick={() => setIsPrivate(!isPrivate)}
               className={`flex items-center gap-2 border transition-all duration-300 ${
                 isPrivate 
-                  ? 'border-theme-orange/30 text-theme-orange bg-theme-orange/10 hover:bg-theme-orange/20 hover:text-foreground' 
-                  : 'border-theme-accent/30 text-theme-accent bg-theme-accent/10 hover:bg-theme-accent/20 hover:text-foreground'
+                  ? 'border-crypto-orange/30 text-crypto-orange bg-crypto-orange/10 hover:bg-crypto-orange/20' 
+                  : 'border-crypto-cyan/30 text-crypto-cyan bg-crypto-cyan/10 hover:bg-crypto-cyan/20'
               }`}
             >
               {isPrivate ? <Lock className="h-4 w-4" /> : <Globe className="h-4 w-4" />}
@@ -120,7 +120,7 @@ const ThoughtEditor = ({ onSubmit }: ThoughtEditorProps) => {
           <Button 
             onClick={handleSubmit}
             disabled={!title.trim() || !hasContent || isSubmitting}
-            className="theme-button text-white font-semibold px-6 py-3"
+            className="neon-button text-white font-semibold px-6 py-3"
           >
             <span className="flex items-center gap-2">
               {isSubmitting ? (
@@ -139,16 +139,16 @@ const ThoughtEditor = ({ onSubmit }: ThoughtEditorProps) => {
         </div>
         
         {isPrivate ? (
-          <div className="theme-block bg-gradient-to-r from-theme-orange/10 to-theme-primary/10 border-theme-orange/20">
+          <div className="blockchain-block bg-gradient-to-r from-crypto-orange/10 to-crypto-green/10 border-crypto-orange/20">
             <p className="text-sm text-muted-foreground">
-              <strong className="text-theme-orange">Private Mode:</strong> Only the cryptographic hash will be stored on-chain. 
+              <strong className="text-crypto-orange">Private Mode:</strong> Only the cryptographic hash will be stored on-chain. 
               Your content and media files remain private but provably existed at this timestamp.
             </p>
           </div>
         ) : (
-          <div className="theme-block bg-gradient-to-r from-theme-accent/10 to-theme-secondary/10 border-theme-accent/20">
+          <div className="blockchain-block bg-gradient-to-r from-crypto-cyan/10 to-crypto-blue/10 border-crypto-cyan/20">
             <p className="text-sm text-muted-foreground">
-              <strong className="text-theme-accent">Public Mode:</strong> Your text content will be published directly on the blockchain.
+              <strong className="text-crypto-cyan">Public Mode:</strong> Your text content will be published directly on the blockchain.
               Media files will only have their hash stored on-chain for privacy.
             </p>
           </div>
