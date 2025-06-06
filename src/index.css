@@ -253,13 +253,13 @@
   }
 
   /* Business gradient text */
-  // .crypto-gradient-text {
+  .crypto-gradient-text {
   //   background: linear-gradient(135deg, 
   //     hsl(var(--business-primary)), 
   //     hsl(var(--business-text-headline))
   //   );
   //   @apply bg-clip-text text-transparent font-bold;
-  // }
+  }
 
   /* Circuit pattern for business theme */
   .circuit-pattern {
