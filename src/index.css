@@ -1,35 +1,36 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 8 12% 4%;
-    --foreground: 158 60% 85%;
+    --background: 8 12% 8%;
+    --foreground: 120 15% 92%;
 
-    --card: 8 15% 6%;
-    --card-foreground: 158 50% 90%;
+    --card: 12 15% 12%;
+    --card-foreground: 120 12% 90%;
 
-    --popover: 8 15% 6%;
-    --popover-foreground: 158 60% 85%;
+    --popover: 12 15% 12%;
+    --popover-foreground: 120 15% 92%;
 
     --primary: 158 64% 52%;
     --primary-foreground: 8 12% 8%;
 
-    --secondary: 8 20% 8%;
-    --secondary-foreground: 158 60% 85%;
+    --secondary: 15 20% 15%;
+    --secondary-foreground: 120 15% 92%;
 
-    --muted: 8 20% 8%;
-    --muted-foreground: 158 30% 60%;
+    --muted: 15 20% 15%;
+    --muted-foreground: 120 10% 60%;
 
     --accent: 158 64% 52%;
     --accent-foreground: 8 12% 8%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 158 60% 85%;
+    --destructive-foreground: 120 15% 92%;
 
-    --border: 8 25% 12%;
-    --input: 8 20% 8%;
+    --border: 15 25% 20%;
+    --input: 15 20% 15%;
     --ring: 158 64% 52%;
 
     --radius: 0.75rem;
@@ -43,23 +44,23 @@
     --crypto-teal: 170 80% 50%;
     
     /* Dark tech colors */
-    --tech-dark: 8 12% 4%;
-    --tech-darker: 8 15% 2%;
-    --tech-light: 8 20% 10%;
-    --tech-accent: 158 50% 25%;
+    --tech-dark: 8 12% 8%;
+    --tech-darker: 8 15% 5%;
+    --tech-light: 15 20% 18%;
+    --tech-accent: 180 50% 25%;
     
     /* Glow effects */
     --glow-primary: 158 64% 52%;
-    --glow-secondary: 180 100% 70%;
-    --glow-accent: 30 100% 65%;
+    --glow-secondary: 200 100% 60%;
+    --glow-accent: 180 100% 70%;
 
-    --sidebar-background: 8 15% 6%;
-    --sidebar-foreground: 158 50% 90%;
+    --sidebar-background: 12 15% 12%;
+    --sidebar-foreground: 120 12% 90%;
     --sidebar-primary: 158 64% 52%;
     --sidebar-primary-foreground: 8 12% 8%;
-    --sidebar-accent: 8 20% 8%;
-    --sidebar-accent-foreground: 158 60% 85%;
-    --sidebar-border: 8 25% 12%;
+    --sidebar-accent: 15 20% 15%;
+    --sidebar-accent-foreground: 120 15% 92%;
+    --sidebar-border: 15 25% 20%;
     --sidebar-ring: 158 64% 52%;
   }
 
@@ -106,10 +107,6 @@
 @layer base {
   * {
     @apply border-border;
-  }
-
-  html {
-    background: hsl(8 15% 2%);
   }
 
   body {
