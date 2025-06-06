@@ -108,8 +108,8 @@ const ThoughtEditor = ({ onSubmit }: ThoughtEditorProps) => {
               onClick={() => setIsPrivate(!isPrivate)}
               className={`flex items-center gap-2 border transition-all duration-300 ${
                 isPrivate 
-                  ? 'border-crypto-orange/30 text-crypto-orange bg-crypto-orange/10 hover:bg-crypto-orange/20' 
-                  : 'border-crypto-cyan/30 text-crypto-cyan bg-crypto-cyan/10 hover:bg-crypto-cyan/20'
+                  ? 'border-theme-orange/30 text-theme-orange bg-theme-orange/10 hover:bg-theme-orange/20 hover:text-theme-orange' 
+                  : 'border-theme-accent/30 text-theme-accent bg-theme-accent/10 hover:bg-theme-accent/20 hover:text-theme-accent'
               }`}
             >
               {isPrivate ? <Lock className="h-4 w-4" /> : <Globe className="h-4 w-4" />}
